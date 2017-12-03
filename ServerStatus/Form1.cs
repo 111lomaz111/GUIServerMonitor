@@ -30,6 +30,8 @@ namespace ServerStatus
             command = "./mpstat.sh";
             changeProgressBar(null, null);
             ShowMyDialogBox();
+            //generalnie to se tostuje cnie
+            MessageBox.Show("TAK");
         }
 
         public void ShowMyDialogBox()
@@ -39,18 +41,14 @@ namespace ServerStatus
             // Show testDialog as a modal dialog and determine if DialogResult = OK.
             if (testDialog.ShowDialog(this) == DialogResult.OK)
             {
-                // Read the contents of testDialog's TextBox.
-                //this.textBoxCommand.Text = testDialog.pass;
-                this.textBoxCommand.Text = "OK";
+                this.textBoxCommand.Text = testDialog.LOGIN + " - " + testDialog.PASSWORD + " - " + testDialog.IP;
+                this.login = testDialog.LOGIN;
+                this.password = testDialog.PASSWORD;
+                this.ip = testDialog.IP;
             }
             else
             {
-                //this.textBoxCommand.Text = "Login: " +  testDialog.LOGIN + " Hasło: " + testDialog.PASSWORD + " Ip: " + testDialog.IP;
-                this.textBoxCommand.Text = testDialog.LOGIN + testDialog.PASSWORD + testDialog.IP;
-                this.login = testDialog.LOGIN;
-                this.password = testDialog.PASSWORD;
-                this.ip= testDialog.IP;
-                //this.textBoxCommand.Text = "Cancelled";
+                this.textBoxCommand.Text = "NOT OK";
             }
             testDialog.Dispose();
         }
@@ -66,14 +64,28 @@ namespace ServerStatus
         }
 
         private void buttonValuePlus_Click(object sender, EventArgs e)
-        {
-            value += 5;
+        {            
+            if(value == 100)
+            {
+                value = 100;
+            }
+            else
+            {
+                value += 5;
+            }
             changeProgressBar(null, null);
         }
 
         private void buttonValueMinus_Click(object sender, EventArgs e)
         {
-            value -= 5;
+            if(value == 0)
+            {
+                value = 0;
+            }
+            else
+            {
+                value -= 5;
+            }
             changeProgressBar(null, null);
         }
 
@@ -85,7 +97,7 @@ namespace ServerStatus
 
         private void connnectToServer(object sender, EventArgs e)
         {
-            var client = new SshClient("80.211.255.150", "usage", "test1234");
+            var client = new SshClient(ip, login, password);
             client.Connect();
             {
                 Thread thread = new Thread(
@@ -96,7 +108,7 @@ namespace ServerStatus
                             i++;
                             var cmd = client.RunCommand(command); // mpstat 1 1 | awk '$3 ~ /CPU/ { for(i=1;i<=NF;i++) { if ($i ~ /%idle/) field=i } } $3 ~ /all/ { printf("%d",100 - $field) }'
                             var result = cmd.Execute();
-                            value = Convert.ToInt16(result);
+                            value = Convert.ToInt32(result);
                             Invoke(new Action(() =>
                             {
                                 changeProgressBar(null, null);
