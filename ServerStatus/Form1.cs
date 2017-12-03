@@ -108,11 +108,12 @@ namespace ServerStatus
                             i++;
                             var cmd = client.RunCommand(command); // mpstat 1 1 | awk '$3 ~ /CPU/ { for(i=1;i<=NF;i++) { if ($i ~ /%idle/) field=i } } $3 ~ /all/ { printf("%d",100 - $field) }'
                             var result = cmd.Execute();
-                            value = Convert.ToInt32(result);
+                            string cos = result;
+                            //value = Convert.ToInt32(result);
                             Invoke(new Action(() =>
                             {
                                 changeProgressBar(null, null);
-                                textBoxValue.Text = "CPU usage: " + result +"%"  + " steps: " + i;
+                                textBoxValue.Text = "CPU usage: " + result +"%"  + " steps: " + i + cos;
                             }));
                             //System.Threading.Thread.Sleep(1000);
                         }                      
