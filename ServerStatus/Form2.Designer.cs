@@ -43,7 +43,7 @@
             this.textBoxLogin.Name = "textBoxLogin";
             this.textBoxLogin.Size = new System.Drawing.Size(100, 20);
             this.textBoxLogin.TabIndex = 0;
-            this.textBoxLogin.Text = "Login";
+            this.textBoxLogin.Text = "usage";
             this.textBoxLogin.TextChanged += new System.EventHandler(this.textBoxLogin_TextChanged);
             // 
             // textBoxPass
@@ -53,7 +53,7 @@
             this.textBoxPass.PasswordChar = '/';
             this.textBoxPass.Size = new System.Drawing.Size(100, 20);
             this.textBoxPass.TabIndex = 2;
-            this.textBoxPass.Text = "Pass";
+            this.textBoxPass.Text = "test1234";
             this.textBoxPass.TextChanged += new System.EventHandler(this.textBoxPass_TextChanged);
             // 
             // textBoxIP
@@ -62,7 +62,7 @@
             this.textBoxIP.Name = "textBoxIP";
             this.textBoxIP.Size = new System.Drawing.Size(100, 20);
             this.textBoxIP.TabIndex = 3;
-            this.textBoxIP.Text = "127.0.0.0";
+            this.textBoxIP.Text = "80.211.255.150";
             this.textBoxIP.TextChanged += new System.EventHandler(this.textBoxIP_TextChanged);
             // 
             // labelLogin

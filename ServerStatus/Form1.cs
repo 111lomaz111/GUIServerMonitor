@@ -30,8 +30,7 @@ namespace ServerStatus
             command = "./mpstat.sh";
             changeProgressBar(null, null);
             ShowMyDialogBox();
-            //generalnie to se tostuje cnie
-            MessageBox.Show("TAK");
+            //MessageBox.Show("TAK");
         }
 
         public void ShowMyDialogBox()
@@ -108,14 +107,12 @@ namespace ServerStatus
                             i++;
                             var cmd = client.RunCommand(command); // mpstat 1 1 | awk '$3 ~ /CPU/ { for(i=1;i<=NF;i++) { if ($i ~ /%idle/) field=i } } $3 ~ /all/ { printf("%d",100 - $field) }'
                             var result = cmd.Execute();
-                            string cos = result;
-                            //value = Convert.ToInt32(result);
+                            value = Convert.ToInt16(result);
                             Invoke(new Action(() =>
                             {
                                 changeProgressBar(null, null);
-                                textBoxValue.Text = "CPU usage: " + result +"%"  + " steps: " + i + cos;
+                                textBoxValue.Text = "CPU usage: " + result + "%"  + " steps: " + i ;
                             }));
-                            //System.Threading.Thread.Sleep(1000);
                         }                      
                     }));
                 thread.Start();
@@ -129,7 +126,7 @@ namespace ServerStatus
 
         private void textBoxCommand_TextChanged(object sender, EventArgs e)
         {
-            command = textBoxCommand.Text;
+
         }
     }
 }
