@@ -62,7 +62,7 @@
             this.textBoxIP.Name = "textBoxIP";
             this.textBoxIP.Size = new System.Drawing.Size(100, 20);
             this.textBoxIP.TabIndex = 3;
-            this.textBoxIP.Text = "80.211.255.150";
+            this.textBoxIP.Text = "192.168.1.50";
             this.textBoxIP.TextChanged += new System.EventHandler(this.textBoxIP_TextChanged);
             // 
             // labelLogin
