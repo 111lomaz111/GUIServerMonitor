@@ -16,8 +16,6 @@ namespace ServerStatus
     {
         private int i, cpuValueUsage, ramValueUsage, ramMaxValue;
         private string cpuUsageCommand, ramUsageCommand, ramMaxValueCheckCommand, diskUsageCommand,login,password,ip;
-        private bool cokolwiek;
-
 
         public Form1()
         {
