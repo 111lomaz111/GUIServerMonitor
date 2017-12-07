@@ -32,25 +32,25 @@ namespace ServerStatus
             ramUsageCommand = "./ramused.sh"; //free - m | awk 'FNR == 2 {print $3}'
             ramMaxValueCheckCommand = "./ramtotal.sh"; //free - m | awk 'FNR == 2 {print $2}'
             changeProgressBar(null, null);
-            ShowMyDialogBox();
+            showLoginForm();
         }
 
-        public void ShowMyDialogBox()
+        public void showLoginForm()
         {
-            Form2 testDialog = new Form2();
+            Form2 loginForm = new Form2();
 
-            if (testDialog.ShowDialog(this) == DialogResult.OK)
+            if (loginForm.ShowDialog(this) == DialogResult.OK)
             {
-                this.textBoxCommand.Text = testDialog.LOGIN + " - " + testDialog.PASSWORD + " - " + testDialog.IP;
-                this.login = testDialog.LOGIN;
-                this.password = testDialog.PASSWORD;
-                this.ip = testDialog.IP;
+                this.textBoxCommand.Text = loginForm.LOGIN + " - " + loginForm.PASSWORD + " - " + loginForm.IP;
+                this.login = loginForm.LOGIN;
+                this.password = loginForm.PASSWORD;
+                this.ip = loginForm.IP;
             }
             else
             {
                 this.textBoxCommand.Text = "NOT OK";
             }
-            testDialog.Dispose();
+            loginForm.Dispose();
         }
 
         private void buttonValuePlus_Click(object sender, EventArgs e)
@@ -72,11 +72,6 @@ namespace ServerStatus
                 ramValueUsage += 5;
             }
             changeProgressBar(null, null);
-        }
-
-        private void circularProgressBarRam_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void buttonValueMinus_Click(object sender, EventArgs e)
@@ -110,11 +105,6 @@ namespace ServerStatus
             circularProgressBarRam.SubscriptText = ramValueUsage.ToString() + "\nMB";
         }
 
-        private void buttonDisconnect_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void connnectToServer(object sender, EventArgs e)
         {
             var client = new SshClient(ip, login, password);
@@ -124,7 +114,7 @@ namespace ServerStatus
             var ramValueLimit = ramValueLimitCmd.Execute();
             ramMaxValue = Convert.ToInt16(ramMaxValue);
             circularProgressBarRam.Maximum = Convert.ToInt16(ramValueLimit);
-            
+
             {
                 Thread threadCPU = new Thread(
                     new ThreadStart(() =>
@@ -139,9 +129,12 @@ namespace ServerStatus
                             {
                                 changeProgressBar(null, null);
                                 textBoxValue.Text = "CPU usage: " + resultCPU + "%" + " steps: " + i;
+
+
                             }));
                         }
                     }));
+            
                 Thread threadRAM = new Thread(
                     new ThreadStart(() =>
                     {
@@ -162,7 +155,13 @@ namespace ServerStatus
                 threadCPU.Start();
                 threadRAM.Start();
             }
-        }    
+        }
+
+
+        private void buttonDisconnect_Click(Thread ramMeasurement, Thread cpuMeasurement, EventArgs e)
+        {
+
+        }
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
