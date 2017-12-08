@@ -29,6 +29,7 @@ namespace ServerStatus
             labelLogin.Text = "Login";
             labelPass.Text = "Password";
             labelIP.Text = "Server IP";
+            buttonLogin.Text = "Login to server";
         }
 
         private void labelLogin_Click(object sender, EventArgs e)

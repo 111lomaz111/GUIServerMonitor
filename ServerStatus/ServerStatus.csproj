@@ -93,6 +93,7 @@
     <Compile Include="AGauge.designer.cs">
       <DependentUpon>AGauge.cs</DependentUpon>
     </Compile>
+    <Compile Include="Connect + Workers\ConnectWorkers.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

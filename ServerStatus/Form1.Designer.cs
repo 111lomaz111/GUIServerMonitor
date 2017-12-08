@@ -82,7 +82,7 @@
             // 
             // buttonValueMinus
             // 
-            this.buttonValueMinus.Location = new System.Drawing.Point(338, 302);
+            this.buttonValueMinus.Location = new System.Drawing.Point(336, 302);
             this.buttonValueMinus.Name = "buttonValueMinus";
             this.buttonValueMinus.Size = new System.Drawing.Size(75, 23);
             this.buttonValueMinus.TabIndex = 4;
@@ -124,6 +124,7 @@
             this.buttonDisconnect.TabIndex = 10;
             this.buttonDisconnect.Text = "Disconnect";
             this.buttonDisconnect.UseVisualStyleBackColor = true;
+            this.buttonDisconnect.Click += new System.EventHandler(this.buttonDisconnect_Click);
             // 
             // circularProgressBarRam
             // 
@@ -158,6 +159,7 @@
             this.circularProgressBarRam.Text = "RAM";
             this.circularProgressBarRam.TextMargin = new System.Windows.Forms.Padding(8, 8, 0, 0);
             this.circularProgressBarRam.Value = 2000;
+            this.circularProgressBarRam.Click += new System.EventHandler(this.circularProgressBarRam_Click);
             // 
             // Form1
             // 
@@ -173,9 +175,11 @@
             this.Controls.Add(this.buttonValueMinus);
             this.Controls.Add(this.buttonValuePlus);
             this.Controls.Add(this.circularProgressBarCPU);
+            this.MaximizeBox = false;
             this.Name = "Form1";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "Check server status by Lomaz";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

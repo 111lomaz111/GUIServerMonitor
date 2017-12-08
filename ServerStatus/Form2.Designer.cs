@@ -50,7 +50,7 @@
             // 
             this.textBoxPass.Location = new System.Drawing.Point(88, 38);
             this.textBoxPass.Name = "textBoxPass";
-            this.textBoxPass.PasswordChar = '/';
+            this.textBoxPass.PasswordChar = '■';
             this.textBoxPass.Size = new System.Drawing.Size(100, 20);
             this.textBoxPass.TabIndex = 2;
             this.textBoxPass.Text = "test1234";
@@ -120,9 +120,10 @@
             this.Controls.Add(this.textBoxIP);
             this.Controls.Add(this.textBoxPass);
             this.Controls.Add(this.textBoxLogin);
+            this.MaximizeBox = false;
             this.Name = "Form2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "LOGIN";
+            this.Text = "Login";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

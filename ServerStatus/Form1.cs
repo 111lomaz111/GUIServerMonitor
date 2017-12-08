@@ -9,13 +9,25 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Renci.SshNet;
 using System.Threading;
+using ServerStatus.Connect___Workers;
 
 namespace ServerStatus
 {
     public partial class Form1 : Form
     {
-        private int i, cpuValueUsage, ramValueUsage, ramMaxValue;
-        private string cpuUsageCommand, ramUsageCommand, ramMaxValueCheckCommand, diskUsageCommand,login,password,ip;
+        private int i, cpuValueUsage, ramValueUsage, ramValueMax;
+        private string cpuUsageCommand, ramUsageCommand, ramMaxValueCheckCommand, diskUsageCommand, login, password, ip;
+        private Thread getValuesThread;
+
+        private void textBoxCommand_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void circularProgressBarRam_Click(object sender, EventArgs e)
+        {
+
+        }
 
         public Form1()
         {
@@ -26,7 +38,7 @@ namespace ServerStatus
         {
             cpuValueUsage = 100;
             ramValueUsage = 16384;
-            circularProgressBarRam.Maximum = ramMaxValue = 16384; //16GB
+            circularProgressBarRam.Maximum = ramValueMax = 16384; //16GB
             i = 0;
             cpuUsageCommand = "./mpstat.sh"; // mpstat 1 1 | awk '$3 ~ /CPU/ { for(i=1;i<=NF;i++) { if ($i ~ /%idle/) field=i } } $3 ~ /all/ { printf("%d",100 - $field) }'
             ramUsageCommand = "./ramused.sh"; //free - m | awk 'FNR == 2 {print $3}'
@@ -53,9 +65,11 @@ namespace ServerStatus
             loginForm.Dispose();
         }
 
+        #region buttons to +/- value on progres bars
+
         private void buttonValuePlus_Click(object sender, EventArgs e)
-        {            
-            if(cpuValueUsage >= 100)
+        {
+            if (cpuValueUsage >= 100)
             {
                 cpuValueUsage = 100;
             }
@@ -63,9 +77,9 @@ namespace ServerStatus
             {
                 cpuValueUsage += 5;
             }
-            if (ramValueUsage >= ramMaxValue)
+            if (ramValueUsage >= ramValueMax)
             {
-                ramValueUsage = ramMaxValue;
+                ramValueUsage = ramValueMax;
             }
             else
             {
@@ -76,13 +90,13 @@ namespace ServerStatus
 
         private void buttonValueMinus_Click(object sender, EventArgs e)
         {
-            if(cpuValueUsage <= 0)
+            if (cpuValueUsage <= 0)
             {
                 cpuValueUsage = 0;
             }
             else
             {
-                cpuValueUsage -= 5;                
+                cpuValueUsage -= 5;
             }
 
             if (ramValueUsage <= 0)
@@ -96,6 +110,8 @@ namespace ServerStatus
             changeProgressBar(null, null);
         }
 
+        #endregion
+
         private void changeProgressBar(object sender, EventArgs e)
         {
             circularProgressBarCPU.Value = cpuValueUsage;
@@ -105,72 +121,49 @@ namespace ServerStatus
             circularProgressBarRam.SubscriptText = ramValueUsage.ToString() + "\nMB";
         }
 
-        private void connnectToServer(object sender, EventArgs e)
-        {
-            var client = new SshClient(ip, login, password);
-            client.Connect();
-
-            var ramValueLimitCmd = client.RunCommand(ramMaxValueCheckCommand);
-            var ramValueLimit = ramValueLimitCmd.Execute();
-            ramMaxValue = Convert.ToInt16(ramMaxValue);
-            circularProgressBarRam.Maximum = Convert.ToInt16(ramValueLimit);
-
-            {
-                Thread threadCPU = new Thread(
-                    new ThreadStart(() =>
-                    {
-                        for (; ; )
-                        {
-                            i++;
-                            var cmdCPU = client.RunCommand(cpuUsageCommand);
-                            var resultCPU = cmdCPU.Execute();
-                            cpuValueUsage = Convert.ToInt16(resultCPU);
-                            Invoke(new Action(() =>
-                            {
-                                changeProgressBar(null, null);
-                                textBoxValue.Text = "CPU usage: " + resultCPU + "%" + " steps: " + i;
-
-
-                            }));
-                        }
-                    }));
-            
-                Thread threadRAM = new Thread(
-                    new ThreadStart(() =>
-                    {
-                        for (; ; )
-                        {
-                            i++;
-                            var cmdRAM = client.RunCommand(ramUsageCommand);
-                            var resultRAM = cmdRAM.Execute();
-                            ramValueUsage = Convert.ToInt16(resultRAM);
-                            Invoke(new Action(() =>
-                            {
-                                //changeProgressBar(null, null);
-                                textBoxValue.Text += "\nRAM usage: " + resultRAM + "MB " + "steps: " + i;
-                            }));
-                            Thread.Sleep(1000);
-                        }
-                    }));
-                threadCPU.Start();
-                threadRAM.Start();
-            }
-        }
-
-
-        private void buttonDisconnect_Click(Thread ramMeasurement, Thread cpuMeasurement, EventArgs e)
-        {
-
-        }
-
         private void buttonConnect_Click(object sender, EventArgs e)
         {
-            connnectToServer(null, null);
+            buttonConnect.Enabled = false;
+
+            getValuesThread = new Thread(
+                    new ThreadStart(() =>
+                    {
+                        ConnectWorkers connectWorkers = new ConnectWorkers(cpuUsageCommand, ramUsageCommand, ramMaxValueCheckCommand, diskUsageCommand, ip, login, password);
+
+                        Invoke(new Action(() =>
+                        {
+                            circularProgressBarRam.Maximum = ramValueMax = connectWorkers.GetramMaxValue();
+                        }));
+
+                        for (i = 0; ; i++)
+                        {
+                            Thread.Sleep(1000);
+                            Invoke(new Action(() =>
+                            {
+
+                                cpuValueUsage = connectWorkers.GetcpuValueUsage();
+                                ramValueUsage = connectWorkers.GetramValueUsage();
+
+                                textBoxValue.Text = "CONNECTED"
+                                + "\nCPU: " + cpuValueUsage.ToString()
+                                + "\nRAM: " + ramValueUsage.ToString()
+                                + "\nMax RAM: " + ramValueMax
+                                + "\nIteration: " + i;
+                                changeProgressBar(null, null);
+
+                            }));
+                        }
+                    }));
+
+            getValuesThread.Start();
+
         }
 
-        private void textBoxCommand_TextChanged(object sender, EventArgs e)
+        private void buttonDisconnect_Click(object sender, EventArgs e)
         {
-
+            getValuesThread.Abort();
+            textBoxValue.Text += "\n\nDISCONNECTED";
+            buttonConnect.Enabled = true;
         }
     }
 }
