@@ -19,16 +19,6 @@ namespace ServerStatus
         private string cpuUsageCommand, ramUsageCommand, ramMaxValueCheckCommand, diskUsageCommand, login, password, ip;
         private Thread getValuesThread;
 
-        private void textBoxCommand_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void circularProgressBarRam_Click(object sender, EventArgs e)
-        {
-
-        }
-
         public Form1()
         {
             InitializeComponent();
@@ -53,14 +43,15 @@ namespace ServerStatus
 
             if (loginForm.ShowDialog(this) == DialogResult.OK)
             {
-                this.textBoxCommand.Text = loginForm.LOGIN + " - " + loginForm.PASSWORD + " - " + loginForm.IP;
+                this.textBoxCommand.Text = loginForm.LOGIN + " - " + "***********" + " - " + loginForm.IP;
                 this.login = loginForm.LOGIN;
                 this.password = loginForm.PASSWORD;
                 this.ip = loginForm.IP;
+                GetValues(null, null);
             }
             else
             {
-                this.textBoxCommand.Text = "NOT OK";
+                this.textBoxCommand.Text = "You must login to server to get usage information from your server.";
             }
             loginForm.Dispose();
         }
@@ -121,43 +112,46 @@ namespace ServerStatus
             circularProgressBarRam.SubscriptText = ramValueUsage.ToString() + "\nMB";
         }
 
-        private void buttonConnect_Click(object sender, EventArgs e)
+        private void GetValues(object sender, EventArgs e)
         {
-            showLoginForm();
-
             buttonConnect.Enabled = false;
 
             getValuesThread = new Thread(
-                    new ThreadStart(() =>
+            new ThreadStart(() =>
+            {
+                ConnectWorkers connectWorkers = new ConnectWorkers(cpuUsageCommand, ramUsageCommand, ramMaxValueCheckCommand, diskUsageCommand, ip, login, password);
+
+                Invoke(new Action(() =>
+                {
+                    circularProgressBarRam.Maximum = ramValueMax = connectWorkers.GetramMaxValue();
+                }));
+
+                for (i = 0; ; i++)
+                {
+                    Thread.Sleep(1000);
+                    Invoke(new Action(() =>
                     {
-                        ConnectWorkers connectWorkers = new ConnectWorkers(cpuUsageCommand, ramUsageCommand, ramMaxValueCheckCommand, diskUsageCommand, ip, login, password);
+                        cpuValueUsage = connectWorkers.GetcpuValueUsage();
+                        ramValueUsage = connectWorkers.GetramValueUsage();
+                        textBoxValue.Text = "CONNECTED"
+                        + "\nCPU: " + cpuValueUsage.ToString()
+                        + "\nRAM: " + ramValueUsage.ToString()
+                        + "\nMax RAM: " + ramValueMax
+                        + "\nIterations: " + i;
+                        changeProgressBar(null, null);
 
-                        Invoke(new Action(() =>
-                        {
-                            circularProgressBarRam.Maximum = ramValueMax = connectWorkers.GetramMaxValue();
-                        }));
-
-                        for (i = 0; ; i++)
-                        {
-                            Thread.Sleep(1000);
-                            Invoke(new Action(() =>
-                            {
-                                cpuValueUsage = connectWorkers.GetcpuValueUsage();
-                                ramValueUsage = connectWorkers.GetramValueUsage();
-
-                                textBoxValue.Text = "CONNECTED"
-                                + "\nCPU: " + cpuValueUsage.ToString()
-                                + "\nRAM: " + ramValueUsage.ToString()
-                                + "\nMax RAM: " + ramValueMax
-                                + "\nIteration: " + i;
-                                changeProgressBar(null, null);
-
-                            }));
-                        }
                     }));
+                }
+            }));
 
             getValuesThread.Start();
+        }
 
+        #region Buttons to connect and disconnect
+
+        private void buttonConnect_Click(object sender, EventArgs e)
+        {
+            showLoginForm();
         }
 
         private void buttonDisconnect_Click(object sender, EventArgs e)
@@ -166,5 +160,7 @@ namespace ServerStatus
             textBoxValue.Text += "\n\nDISCONNECTED";
             buttonConnect.Enabled = true;
         }
+
+        #endregion
     }
 }

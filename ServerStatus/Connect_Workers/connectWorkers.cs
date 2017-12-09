@@ -41,6 +41,11 @@ namespace ServerStatus.Connect___Workers
             return cpuValueUsage;
         }
 
+        public int GetI()
+        {
+            return i;
+        }
+
         #endregion
 
         #region setters
@@ -102,8 +107,9 @@ namespace ServerStatus.Connect___Workers
             threadRAM = new Thread(
                 new ThreadStart(() =>
                 {
-                    for (; ; )
+                    for (; ;)
                     {
+                        i++;
                         var cmdRAM = client.RunCommand(ramUsageCommand);
                         var resultRAM = cmdRAM.Execute();
                         ramValueUsage = Convert.ToInt16(resultRAM);

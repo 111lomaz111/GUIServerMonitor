@@ -106,7 +106,6 @@
             this.textBoxCommand.Name = "textBoxCommand";
             this.textBoxCommand.Size = new System.Drawing.Size(626, 20);
             this.textBoxCommand.TabIndex = 9;
-            this.textBoxCommand.TextChanged += new System.EventHandler(this.textBoxCommand_TextChanged);
             // 
             // textBoxValue
             // 
@@ -159,14 +158,13 @@
             this.circularProgressBarRam.Text = "RAM";
             this.circularProgressBarRam.TextMargin = new System.Windows.Forms.Padding(8, 8, 0, 0);
             this.circularProgressBarRam.Value = 2000;
-            this.circularProgressBarRam.Click += new System.EventHandler(this.circularProgressBarRam_Click);
             // 
             // Form1
             // 
             this.AcceptButton = this.buttonConnect;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(648, 547);
+            this.ClientSize = new System.Drawing.Size(654, 541);
             this.Controls.Add(this.circularProgressBarRam);
             this.Controls.Add(this.buttonDisconnect);
             this.Controls.Add(this.textBoxValue);
@@ -176,6 +174,8 @@
             this.Controls.Add(this.buttonValuePlus);
             this.Controls.Add(this.circularProgressBarCPU);
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(670, 580);
+            this.MinimumSize = new System.Drawing.Size(670, 580);
             this.Name = "Form1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
