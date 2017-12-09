@@ -44,7 +44,7 @@ namespace ServerStatus
             ramUsageCommand = "./ramused.sh"; //free - m | awk 'FNR == 2 {print $3}'
             ramMaxValueCheckCommand = "./ramtotal.sh"; //free - m | awk 'FNR == 2 {print $2}'
             changeProgressBar(null, null);
-            showLoginForm();
+            //showLoginForm();
         }
 
         public void showLoginForm()
@@ -123,6 +123,8 @@ namespace ServerStatus
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
+            showLoginForm();
+
             buttonConnect.Enabled = false;
 
             getValuesThread = new Thread(
@@ -140,7 +142,6 @@ namespace ServerStatus
                             Thread.Sleep(1000);
                             Invoke(new Action(() =>
                             {
-
                                 cpuValueUsage = connectWorkers.GetcpuValueUsage();
                                 ramValueUsage = connectWorkers.GetramValueUsage();
 
