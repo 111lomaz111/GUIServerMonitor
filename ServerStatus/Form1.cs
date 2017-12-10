@@ -30,9 +30,18 @@ namespace ServerStatus
             ramValueUsage = 16384;
             circularProgressBarRam.Maximum = ramValueMax = 16384; //16GB
             i = 0;
+
+            /*
             cpuUsageCommand = "./mpstat.sh"; // mpstat 1 1 | awk '$3 ~ /CPU/ { for(i=1;i<=NF;i++) { if ($i ~ /%idle/) field=i } } $3 ~ /all/ { printf("%d",100 - $field) }'
             ramUsageCommand = "./ramused.sh"; //free - m | awk 'FNR == 2 {print $3}'
             ramMaxValueCheckCommand = "./ramtotal.sh"; //free - m | awk 'FNR == 2 {print $2}'
+            */
+
+            cpuUsageCommand = textBoxCPUUsageCommand.Text;
+            ramUsageCommand = "free -m | awk 'FNR == 2 {print $3}'";
+            ramMaxValueCheckCommand = "free -m | awk 'FNR == 2 {print $2}'"; 
+
+
             changeProgressBar(null, null);
             //showLoginForm();
         }

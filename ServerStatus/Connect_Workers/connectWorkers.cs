@@ -86,7 +86,7 @@ namespace ServerStatus.Connect___Workers
             var ramValueLimitCmd = client.RunCommand(ramMaxValueCheckCommand);
 
             var ramValueLimit = ramValueLimitCmd.Execute();
-            ramMaxValue = Convert.ToInt16(ramValueLimit);
+            ramMaxValue = Convert.ToInt32(ramValueLimit);
         }
 
         private void Workers()
@@ -112,7 +112,7 @@ namespace ServerStatus.Connect___Workers
                         i++;
                         var cmdRAM = client.RunCommand(ramUsageCommand);
                         var resultRAM = cmdRAM.Execute();
-                        ramValueUsage = Convert.ToInt16(resultRAM);
+                        ramValueUsage = Convert.ToInt32(resultRAM);
                         Thread.Sleep(1000);
                     }
                 }));

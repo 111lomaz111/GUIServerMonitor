@@ -36,6 +36,7 @@
             this.textBoxValue = new System.Windows.Forms.RichTextBox();
             this.buttonDisconnect = new System.Windows.Forms.Button();
             this.circularProgressBarRam = new CircularProgressBar.CircularProgressBar();
+            this.textBoxCPUUsageCommand = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // circularProgressBarCPU
@@ -159,12 +160,24 @@
             this.circularProgressBarRam.TextMargin = new System.Windows.Forms.Padding(8, 8, 0, 0);
             this.circularProgressBarRam.Value = 2000;
             // 
+            // textBoxCPUUsageCommand
+            // 
+            this.textBoxCPUUsageCommand.Location = new System.Drawing.Point(16, 509);
+            this.textBoxCPUUsageCommand.Name = "textBoxCPUUsageCommand";
+            this.textBoxCPUUsageCommand.ReadOnly = true;
+            this.textBoxCPUUsageCommand.Size = new System.Drawing.Size(626, 20);
+            this.textBoxCPUUsageCommand.TabIndex = 12;
+            this.textBoxCPUUsageCommand.Text = "mpstat 1 1 | awk \'$3 ~ /CPU/ { for(i=1;i<=NF;i++) { if ($i ~ /%idle/) field=i } }" +
+    " $3 ~ /all/ { printf(\"%d\",100 - $field) }\'";
+            this.textBoxCPUUsageCommand.Visible = false;
+            // 
             // Form1
             // 
             this.AcceptButton = this.buttonConnect;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(654, 541);
+            this.Controls.Add(this.textBoxCPUUsageCommand);
             this.Controls.Add(this.circularProgressBarRam);
             this.Controls.Add(this.buttonDisconnect);
             this.Controls.Add(this.textBoxValue);
@@ -195,6 +208,7 @@
         private System.Windows.Forms.RichTextBox textBoxValue;
         private System.Windows.Forms.Button buttonDisconnect;
         private CircularProgressBar.CircularProgressBar circularProgressBarRam;
+        private System.Windows.Forms.TextBox textBoxCPUUsageCommand;
     }
 }
 
