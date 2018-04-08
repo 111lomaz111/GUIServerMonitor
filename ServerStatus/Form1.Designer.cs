@@ -79,6 +79,7 @@
             this.buttonValuePlus.TabIndex = 3;
             this.buttonValuePlus.Text = "+5 VALUE";
             this.buttonValuePlus.UseVisualStyleBackColor = true;
+            this.buttonValuePlus.Visible = false;
             this.buttonValuePlus.Click += new System.EventHandler(this.buttonValuePlus_Click);
             // 
             // buttonValueMinus
@@ -89,6 +90,7 @@
             this.buttonValueMinus.TabIndex = 4;
             this.buttonValueMinus.Text = "-5 VALUE";
             this.buttonValueMinus.UseVisualStyleBackColor = true;
+            this.buttonValueMinus.Visible = false;
             this.buttonValueMinus.Click += new System.EventHandler(this.buttonValueMinus_Click);
             // 
             // buttonConnect
@@ -176,6 +178,7 @@
             this.AcceptButton = this.buttonConnect;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(654, 541);
             this.Controls.Add(this.textBoxCPUUsageCommand);
             this.Controls.Add(this.circularProgressBarRam);

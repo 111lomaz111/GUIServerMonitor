@@ -143,12 +143,11 @@ namespace ServerStatus
                         cpuValueUsage = connectWorkers.GetcpuValueUsage();
                         ramValueUsage = connectWorkers.GetramValueUsage();
                         textBoxValue.Text = "CONNECTED"
-                        + "\nCPU: " + cpuValueUsage.ToString()
-                        + "\nRAM: " + ramValueUsage.ToString()
-                        + "\nMax RAM: " + ramValueMax
+                        + "\nCPU in use: " + cpuValueUsage.ToString() + "%"
+                        + "\nRAM in use: " + ramValueUsage.ToString() + "MB"
+                        + "\nRAM installed on server: " + ramValueMax + "MB"
                         + "\nIterations: " + i;
                         changeProgressBar(null, null);
-
                     }));
                 }
             }));

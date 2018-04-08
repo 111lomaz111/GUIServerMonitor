@@ -76,7 +76,11 @@ namespace ServerStatus.Connect___Workers
             }
             catch (Exception e)
             {
+#if DEBUG
                 MessageBox.Show("Cannot connect to server. Error: " + e);
+#else
+                MessageBox.Show("Cannot connect to server, wrong username/password or IP!");
+#endif
             }
             GetRamValueLimit();
         }
@@ -95,7 +99,7 @@ namespace ServerStatus.Connect___Workers
             threadCPU = new Thread(
                     new ThreadStart(() =>
                     {
-                        for (; ; )
+                        for (; ;)
                         {
                             i++;
                             var cmdCPU = client.RunCommand(cpuUsageCommand);
